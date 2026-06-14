@@ -244,16 +244,46 @@
 }
 
 @media (max-width: 600px) {
+  .members-page {
+    padding-top: var(--header-height);
+  }
+
+  .members-hero {
+    padding: 24px 0 20px;
+  }
+
+  .members-hero-title {
+    font-size: clamp(1.85rem, 8vw, 2.5rem);
+  }
+
+  .members-hero-actions {
+    flex-direction: column;
+  }
+
+  .members-hero-actions .btn {
+    width: 100%;
+    min-height: 48px;
+  }
+
+  .members-summary {
+    gap: 8px;
+  }
+
+  .summary-chip {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+
+  .members-section-header h2 {
+    font-size: 1.5rem;
+  }
+
   .members-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 
-  .member-body {
-    padding: 14px;
-  }
-
-  .member-name {
-    font-size: 1.1rem;
+  .member-photo {
+    aspect-ratio: 3 / 4;
   }
 }
