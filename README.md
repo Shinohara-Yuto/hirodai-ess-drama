@@ -107,6 +107,24 @@ website/
 ├── scripts/build-members.py
 └── assets/             画像・ポスター
 ```
+## 検索エンジン対策（SEO）
+
+「広島大学 ESS」で検索されやすくするため、以下を設定済みです。
+
+- 各ページの **title / description / keywords**
+- **Open Graph**（SNSシェア用）・**canonical URL**
+- **構造化データ**（Organization / WebSite / Event / FAQ）
+- `robots.txt` と `sitemap.xml`
+
+### Google にサイトを登録する手順
+
+1. [Google Search Console](https://search.google.com/search-console) にログイン
+2. プロパティに `https://shinohara-yuto.github.io/hirodai-ess-website/` を追加
+3. サイトマップ URL を登録: `https://shinohara-yuto.github.io/hirodai-ess-website/sitemap.xml`
+4. Instagram のプロフィールリンクに公式サイト URL を載せる（被リンクになり SEO に有効）
+
+※ 検索結果への反映には数日〜数週間かかることがあります。
+
 ## 公開方法
 
 - **GitHub Pages**: リポジトリにpushして Pages を有効化
