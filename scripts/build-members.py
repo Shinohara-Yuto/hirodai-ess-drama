@@ -64,8 +64,18 @@ def copy_photos() -> None:
         print(f"警告: 写真フォルダが見つかりません: {PHOTO_SRC}")
         return
     for path in PHOTO_SRC.iterdir():
-        if path.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp"}:
-            shutil.copy2(path, PHOTO_DST / path.name)
+        if path.suffix.lower() not in {".jpg", ".jpeg", ".png", ".webp"}:
+            continue
+        match = re.search(r"(\d+)", path.stem)
+        if match:
+            number = int(match.group(1))
+            ext = path.suffix.lower()
+            if ext == ".jpeg":
+                ext = ".jpg"
+            dst_name = f"photo {number}{ext}"
+        else:
+            dst_name = path.name
+        shutil.copy2(path, PHOTO_DST / dst_name)
 
 
 def read_members_from_excel() -> list[dict]:

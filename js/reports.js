@@ -21,8 +21,16 @@ function createReportCard(report, isLatest) {
         <time class="report-date" datetime="${report.date}">${escapeHtml(report.dateLabel || report.date)}</time>
       </div>
       <h2 class="report-title">${escapeHtml(report.title)}</h2>
-      <p class="report-text">${escapeHtml(report.body)}</p>
-      ${report.author ? `<p class="report-author">${escapeHtml(report.author)}</p>` : ""}
+      <dl class="report-details">
+        <div class="report-detail">
+          <dt>担当者</dt>
+          <dd class="report-author">${escapeHtml(report.author || "活動報告担当")}</dd>
+        </div>
+        <div class="report-detail">
+          <dt>コメント</dt>
+          <dd class="report-comment">${escapeHtml(report.comment || report.body || "")}</dd>
+        </div>
+      </dl>
     </div>
   `;
 

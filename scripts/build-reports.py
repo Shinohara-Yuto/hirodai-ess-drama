@@ -28,7 +28,8 @@ WEEKDAYS_JA = ("月", "火", "水", "木", "金", "土", "日")
 HEADER_ALIASES = {
     "date": {"日付", "date", "Date"},
     "title": {"タイトル", "題名", "title", "Title"},
-    "author": {"担当", "著者", "活動報告担当", "author", "Author"},
+    "author": {"担当", "担当者", "著者", "活動報告担当", "author", "Author"},
+    "comment": {"コメント", "comment", "Comment", "一言", "感想"},
     "body": {"本文", "内容", "活動内容", "レポート", "body", "Body"},
     "photo": {"写真", "photo", "Photo", "画像"},
 }
@@ -108,7 +109,7 @@ def find_header_map(row: list) -> dict[str, int] | None:
         for key, aliases in HEADER_ALIASES.items():
             if text in aliases:
                 mapping[key] = index
-    if "date" in mapping and ("body" in mapping or "title" in mapping):
+    if "date" in mapping and ("comment" in mapping or "body" in mapping or "title" in mapping):
         return mapping
     return None
 
@@ -139,7 +140,8 @@ def read_reports_from_excel() -> dict[date, dict]:
                 "date": report_date,
                 "title": cell_text(row[1] if len(row) > 1 else ""),
                 "author": cell_text(row[2] if len(row) > 2 else ""),
-                "body": cell_text(row[3] if len(row) > 3 else ""),
+                "comment": cell_text(row[3] if len(row) > 3 else ""),
+                "body": "",
                 "photo_ref": parse_photo_ref(row[4] if len(row) > 4 else None, report_date),
             }
             continue
@@ -148,11 +150,19 @@ def read_reports_from_excel() -> dict[date, dict]:
         if report_date is None:
             continue
 
+        comment = ""
+        if "comment" in header_map and header_map["comment"] < len(row):
+            comment = cell_text(row[header_map["comment"]])
+        body = ""
+        if "body" in header_map and header_map["body"] < len(row):
+            body = cell_text(row[header_map["body"]])
+
         reports[report_date] = {
             "date": report_date,
             "title": cell_text(row[header_map["title"]]) if "title" in header_map else "",
             "author": cell_text(row[header_map["author"]]) if "author" in header_map else "",
-            "body": cell_text(row[header_map["body"]]) if "body" in header_map else "",
+            "comment": comment or body,
+            "body": body,
             "photo_ref": parse_photo_ref(
                 row[header_map["photo"]] if "photo" in header_map and header_map["photo"] < len(row) else None,
                 report_date,
@@ -183,8 +193,17 @@ def default_title(report_date: date) -> str:
     return f"{report_date.month}月{report_date.day}日 金曜アクト"
 
 
-def default_body(report_date: date) -> str:
+def default_comment(report_date: date) -> str:
     return f"{date_label(report_date)}のアクトの活動報告です。"
+
+
+def format_author(author: str) -> str:
+    text = author.strip()
+    if not text:
+        return "活動報告担当"
+    if text.startswith("活動報告担当"):
+        return text
+    return f"活動報告担当：{text}"
 
 
 def retention_cutoff(today: date | None = None) -> date:
@@ -236,8 +255,12 @@ def build_reports() -> list[dict]:
             continue
 
         title = excel_entry.get("title") or default_title(report_date)
-        author = excel_entry.get("author") or "活動報告担当"
-        body = excel_entry.get("body") or default_body(report_date)
+        author = format_author(excel_entry.get("author") or "")
+        comment = (
+            excel_entry.get("comment")
+            or excel_entry.get("body")
+            or default_comment(report_date)
+        )
         photo = copy_photo(photo_path, report_date)
         used_dest_paths.add((PHOTO_DST / Path(photo).name).resolve())
 
@@ -248,7 +271,7 @@ def build_reports() -> list[dict]:
                 "dateLabel": date_label(report_date),
                 "title": title,
                 "author": author,
-                "body": body,
+                "comment": comment,
                 "photo": photo,
             }
         )
