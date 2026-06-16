@@ -196,6 +196,17 @@ async function initGallery() {
   }
 }
 
+function syncAnnounceHeight() {
+  const bar = document.querySelector(".announce-bar");
+  if (!bar) return;
+
+  if (window.matchMedia("(max-width: 600px)").matches) {
+    document.documentElement.style.setProperty("--announce-height", `${bar.offsetHeight}px`);
+  } else {
+    document.documentElement.style.setProperty("--announce-height", "44px");
+  }
+}
+
 function initNav() {
   const header = document.querySelector(".site-header");
   const toggle = document.querySelector(".nav-toggle");
@@ -245,4 +256,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initGallery();
   initNav();
   initReveal();
+  syncAnnounceHeight();
+  window.addEventListener("resize", syncAnnounceHeight);
 });
