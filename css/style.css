@@ -1081,6 +1081,19 @@ ul {
   align-items: start;
 }
 
+.current-posters--single {
+  grid-template-columns: 1fr;
+  max-width: 360px;
+  margin-inline: auto;
+}
+
+@media (min-width: 901px) {
+  .current-posters--single {
+    max-width: 320px;
+    margin-inline: 0;
+  }
+}
+
 .current-poster {
   border-radius: var(--radius);
   overflow: hidden;
@@ -1637,10 +1650,10 @@ ul {
   text-decoration: underline;
 }
 
-.footer-nav h3,
-.footer-cta h3 {
+.footer-nav-title {
   font-family: var(--font-serif);
   font-size: 1rem;
+  font-weight: 600;
   color: #fff;
   margin-bottom: 16px;
 }
