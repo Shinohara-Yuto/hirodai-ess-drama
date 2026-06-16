@@ -47,7 +47,7 @@ async function loadReports() {
     }
 
     if (reports.length === 0) {
-      list.innerHTML = '<p class="report-text">活動報告は準備中です。次回のアクト後に更新予定です。</p>';
+      list.innerHTML = '<p class="report-text">活動報告は準備中です。次回の金曜アクト後に更新予定です。</p>';
       return;
     }
 
