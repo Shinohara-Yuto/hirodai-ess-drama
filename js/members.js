@@ -9,6 +9,22 @@ function photoPath(photoNumber) {
   return `assets/members/photo ${photoNumber}.jpg`;
 }
 
+function createOtherMemberCard() {
+  const card = document.createElement("article");
+  card.className = "member-card member-card--other reveal";
+  card.innerHTML = `
+    <div class="member-photo member-photo--placeholder member-photo--other">
+      <span aria-hidden="true">+1</span>
+    </div>
+    <div class="member-body">
+      <span class="member-grade-badge">1年生</span>
+      <h3 class="member-name">他一名</h3>
+      <p class="member-message">個別紹介は掲載していません。</p>
+    </div>
+  `;
+  return card;
+}
+
 function createMemberCard(member) {
   const card = document.createElement("article");
   card.className = "member-card reveal";
@@ -55,20 +71,22 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-function updateSummaryCounts(counts) {
+function updateSummaryCounts(counts, otherCount = 0) {
   if (!counts) return;
 
   const mapping = [
     ["grade-3", counts.grade3, "3年生"],
     ["grade-2", counts.grade2, "2年生"],
-    ["grade-1", counts.grade1, "1年生"],
+    ["grade-1", counts.grade1, "1年生", otherCount],
   ];
 
-  mapping.forEach(([id, count, label]) => {
+  mapping.forEach(([id, count, label, extraOther = 0]) => {
     const section = document.getElementById(id);
     if (!section) return;
     const countEl = section.querySelector(".members-count");
-    if (countEl) countEl.textContent = `${count}名`;
+    if (countEl) {
+      countEl.textContent = extraOther > 0 ? `${count}名＋他${extraOther}名` : `${count}名`;
+    }
   });
 
   document.querySelectorAll(".summary-chip").forEach((chip) => {
@@ -78,11 +96,25 @@ function updateSummaryCounts(counts) {
     } else if (text.includes("2年生") && counts.grade2 != null) {
       chip.innerHTML = `2年生 <strong>${counts.grade2}</strong>名`;
     } else if (text.includes("1年生") && counts.grade1 != null) {
-      chip.innerHTML = `1年生 <strong>${counts.grade1}</strong>名`;
+      const suffix = otherCount > 0 ? `＋他${otherCount}` : "";
+      chip.innerHTML = `1年生 <strong>${counts.grade1}</strong>名${suffix}`;
     } else if (chip.classList.contains("summary-chip--total") && counts.total != null) {
-      chip.innerHTML = `合計 <strong>${counts.total}</strong>名`;
+      const listed = counts.listed ?? counts.total;
+      chip.innerHTML =
+        otherCount > 0
+          ? `紹介 <strong>${listed}</strong>名＋他<strong>${otherCount}</strong>名`
+          : `合計 <strong>${counts.total}</strong>名`;
     }
   });
+
+  const leadEl = document.querySelector(".members-hero-lead");
+  if (leadEl && counts.total != null) {
+    const listed = counts.listed ?? counts.total - otherCount;
+    leadEl.textContent =
+      otherCount > 0
+        ? `広島大学 ESS ドラマセクションの${listed}名を紹介（他${otherCount}名）。公演・練習・イベント、全部がESSドラマの日常です。`
+        : `広島大学 ESS ドラマセクションの${counts.total}人。公演・練習・イベント、全部がESSドラマの日常です。`;
+  }
 }
 
 async function loadMembers() {
@@ -98,7 +130,7 @@ async function loadMembers() {
     const data = await response.json();
     const members = data.members || [];
 
-    updateSummaryCounts(data.counts);
+    updateSummaryCounts(data.counts, data.otherCount || 0);
 
     Object.values(containers).forEach((el) => {
       if (el) el.innerHTML = "";
@@ -109,6 +141,10 @@ async function loadMembers() {
       if (!container) return;
       container.appendChild(createMemberCard(member));
     });
+
+    if (data.otherCount > 0 && containers[1]) {
+      containers[1].appendChild(createOtherMemberCard());
+    }
 
     document.querySelectorAll(".member-card").forEach((el) => {
       if (typeof IntersectionObserver !== "undefined") {

@@ -1,9 +1,11 @@
 {
   "source": "メンバー紹介.xlsx",
+  "otherCount": 1,
   "counts": {
     "grade3": 10,
     "grade2": 8,
-    "grade1": 16,
+    "grade1": 15,
+    "listed": 33,
     "total": 34
   },
   "members": [
@@ -246,14 +248,6 @@
       "hometown": "",
       "hobby": "",
       "photo": 30
-    },
-    {
-      "grade": 1,
-      "name": "Rento",
-      "faculty": "情報科学部",
-      "hometown": "",
-      "hobby": "",
-      "photo": 31
     },
     {
       "grade": 1,

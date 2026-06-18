@@ -710,6 +710,14 @@ ul {
   color: var(--color-text-muted);
 }
 
+.stat-note {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
 /* ===== Schedule ===== */
 .schedule {
   background: #fff;

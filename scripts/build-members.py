@@ -21,6 +21,9 @@ WEBSITE = ROOT / "website"
 PHOTO_DST = WEBSITE / "assets" / "members"
 JSON_OUT = WEBSITE / "data" / "members.json"
 
+OTHER_MEMBER_COUNT = 1
+EXCLUDED_PHOTOS = {31}
+
 SECTION_GRADES = {
     "三年生": 3,
     "3年生": 3,
@@ -69,6 +72,8 @@ def copy_photos() -> None:
         match = re.search(r"(\d+)", path.stem)
         if match:
             number = int(match.group(1))
+            if number in EXCLUDED_PHOTOS:
+                continue
             ext = path.suffix.lower()
             if ext == ".jpeg":
                 ext = ".jpg"
@@ -103,6 +108,10 @@ def read_members_from_excel() -> list[dict]:
         if current_grade is None or not first:
             continue
 
+        photo = parse_photo(row[4] if len(row) > 4 else None)
+        if photo in EXCLUDED_PHOTOS:
+            continue
+
         members.append(
             {
                 "grade": current_grade,
@@ -110,7 +119,7 @@ def read_members_from_excel() -> list[dict]:
                 "faculty": cell_text(row, 1),
                 "hometown": cell_text(row, 2),
                 "hobby": cell_text(row, 3),
-                "photo": parse_photo(row[4] if len(row) > 4 else None),
+                "photo": photo,
             }
         )
 
@@ -138,11 +147,13 @@ def main() -> None:
 
     payload = {
         "source": XLSX.name,
+        "otherCount": OTHER_MEMBER_COUNT,
         "counts": {
             "grade3": counts[3],
             "grade2": counts[2],
             "grade1": counts[1],
-            "total": len(members),
+            "listed": len(members),
+            "total": len(members) + OTHER_MEMBER_COUNT,
         },
         "members": members,
     }

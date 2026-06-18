@@ -201,6 +201,19 @@
   line-height: 1.5;
 }
 
+.member-card--other {
+  border: 1px dashed rgba(26, 22, 37, 0.15);
+}
+
+.member-photo--other {
+  background: linear-gradient(135deg, #e8e4f0, #f0e8ec);
+}
+
+.member-photo--other span {
+  font-size: 2rem;
+  color: rgba(26, 22, 37, 0.35);
+}
+
 .member-message {
   font-size: 0.85rem;
   color: var(--color-text-muted);
