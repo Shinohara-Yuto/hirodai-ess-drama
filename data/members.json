@@ -62,7 +62,7 @@
       "name": "Sosuke",
       "faculty": "理学部物理",
       "hometown": "山口県",
-      "hobby": "読書・映画",
+      "hobby": "サンリオ(クロミ)収集・メイク動画視聴",
       "photo": 7
     },
     {
@@ -118,7 +118,7 @@
       "name": "Shinohara Yuto",
       "faculty": "工学部一類",
       "hometown": "長崎県",
-      "hobby": "ディズニー全般・マラソン",
+      "hobby": "ディズニー・マラソン",
       "photo": 14
     },
     {
@@ -147,25 +147,25 @@
     },
     {
       "grade": 2,
-      "name": "Tinami",
+      "name": "Chinami",
       "faculty": "教育学部",
       "hometown": "兵庫県",
-      "hobby": "",
+      "hobby": "英語ディベートの妖精",
       "photo": 18
     },
     {
       "grade": 1,
       "name": "Bea",
       "faculty": "生物生産学部",
-      "hometown": "",
-      "hobby": "",
+      "hometown": "岡山県",
+      "hobby": "音楽を聴くこと",
       "photo": 19
     },
     {
       "grade": 1,
       "name": "Genta",
       "faculty": "工学部三類",
-      "hometown": "",
+      "hometown": "兵庫県",
       "hobby": "",
       "photo": 20
     },
@@ -173,15 +173,15 @@
       "grade": 1,
       "name": "Kan",
       "faculty": "経済学部",
-      "hometown": "",
-      "hobby": "",
+      "hometown": "福岡県",
+      "hobby": "アニメ漫画・料理・スポーツ",
       "photo": 21
     },
     {
       "grade": 1,
       "name": "Ruki",
       "faculty": "情報科学部",
-      "hometown": "",
+      "hometown": "大阪府",
       "hobby": "",
       "photo": 22
     },
@@ -189,23 +189,23 @@
       "grade": 1,
       "name": "Maria",
       "faculty": "教育学部",
-      "hometown": "",
-      "hobby": "",
+      "hometown": "長崎県",
+      "hobby": "歌・ダンス",
       "photo": 23
     },
     {
       "grade": 1,
-      "name": "Tomomatu Rei",
+      "name": "Tomomatasu Rei",
       "faculty": "情報科学部",
-      "hometown": "",
-      "hobby": "",
+      "hometown": "愛媛県",
+      "hobby": "ラーメン巡り・カラオケ",
       "photo": 24
     },
     {
       "grade": 1,
       "name": "Araki Yuto",
       "faculty": "経済学部",
-      "hometown": "",
+      "hometown": "福岡県",
       "hobby": "",
       "photo": 25
     },
@@ -213,15 +213,15 @@
       "grade": 1,
       "name": "Seno ami",
       "faculty": "教育学部",
-      "hometown": "",
-      "hobby": "",
+      "hometown": "愛媛県",
+      "hobby": "アナ雪を見ること(特に2)",
       "photo": 26
     },
     {
       "grade": 1,
       "name": "Atuhiro",
       "faculty": "工学部三類",
-      "hometown": "",
+      "hometown": "岡山県",
       "hobby": "",
       "photo": 27
     },
@@ -229,7 +229,7 @@
       "grade": 1,
       "name": "Hayato",
       "faculty": "情報科学部",
-      "hometown": "",
+      "hometown": "愛知県",
       "hobby": "",
       "photo": 28
     },
@@ -237,7 +237,7 @@
       "grade": 1,
       "name": "Kaduki",
       "faculty": "経済学部",
-      "hometown": "",
+      "hometown": "福岡県",
       "hobby": "",
       "photo": 29
     },
@@ -245,32 +245,32 @@
       "grade": 1,
       "name": "Ryosuke",
       "faculty": "経済学部",
-      "hometown": "",
-      "hobby": "",
+      "hometown": "福岡県",
+      "hobby": "散歩・アニメ鑑賞",
       "photo": 30
     },
     {
       "grade": 1,
-      "name": "Ami",
+      "name": "Manabe Ami",
       "faculty": "教育学部",
-      "hometown": "",
-      "hobby": "",
+      "hometown": "広島県",
+      "hobby": "オタク活動・Netflix鑑賞",
       "photo": 32
     },
     {
       "grade": 1,
-      "name": "Fukamati Momoka",
+      "name": "Name Momoka",
       "faculty": "工学部特別コース",
-      "hometown": "",
-      "hobby": "",
+      "hometown": "愛媛県",
+      "hobby": "音楽(JとKpop)・ピクミンと歩くこと",
       "photo": 33
     },
     {
       "grade": 1,
       "name": "Ayaka",
       "faculty": "教育学部",
-      "hometown": "",
-      "hobby": "",
+      "hometown": "千葉県",
+      "hobby": "お菓子作り・絵を描くこと",
       "photo": 34
     }
   ]
