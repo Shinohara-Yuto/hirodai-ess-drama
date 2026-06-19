@@ -1,11 +1,15 @@
 {
   "source": "メンバー紹介.xlsx",
-  "otherCount": 1,
+  "otherByGrade": {
+    "1": 1,
+    "2": 1
+  },
+  "otherCount": 2,
   "counts": {
     "grade3": 10,
-    "grade2": 8,
+    "grade2": 7,
     "grade1": 15,
-    "listed": 33,
+    "listed": 32,
     "total": 34
   },
   "members": [
@@ -128,14 +132,6 @@
       "hometown": "広島県",
       "hobby": "音楽を聴くこと（WEST.)",
       "photo": 15
-    },
-    {
-      "grade": 2,
-      "name": "Yukika",
-      "faculty": "生物生産学部",
-      "hometown": "愛媛県",
-      "hobby": "ビーズ・ハムスターと遊ぶ",
-      "photo": 16
     },
     {
       "grade": 2,

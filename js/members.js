@@ -9,7 +9,19 @@ function photoPath(photoNumber) {
   return `assets/members/photo ${photoNumber}.jpg`;
 }
 
-function createOtherMemberCard() {
+function normalizeOtherByGrade(data) {
+  if (data.otherByGrade && Object.keys(data.otherByGrade).length > 0) {
+    return Object.fromEntries(
+      Object.entries(data.otherByGrade).map(([grade, count]) => [Number(grade), Number(count)])
+    );
+  }
+  if (data.otherCount > 0) {
+    return { 1: data.otherCount };
+  }
+  return {};
+}
+
+function createOtherMemberCard(grade) {
   const card = document.createElement("article");
   card.className = "member-card member-card--other reveal";
   card.innerHTML = `
@@ -17,7 +29,7 @@ function createOtherMemberCard() {
       <span aria-hidden="true">+1</span>
     </div>
     <div class="member-body">
-      <span class="member-grade-badge">1年生</span>
+      <span class="member-grade-badge">${GRADE_LABELS[grade] || ""}</span>
       <h3 class="member-name">他一名</h3>
       <p class="member-message">個別紹介は掲載していません。</p>
     </div>
@@ -71,19 +83,21 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-function updateSummaryCounts(counts, otherCount = 0) {
+function updateSummaryCounts(counts, otherByGrade = {}) {
   if (!counts) return;
 
-  const mapping = [
-    ["grade-3", counts.grade3, "3年生"],
-    ["grade-2", counts.grade2, "2年生"],
-    ["grade-1", counts.grade1, "1年生", otherCount],
-  ];
+  const otherTotal = Object.values(otherByGrade).reduce((sum, count) => sum + count, 0);
+  const gradeOther = (grade) => otherByGrade[grade] || 0;
 
-  mapping.forEach(([id, count, label, extraOther = 0]) => {
+  [
+    ["grade-3", counts.grade3, 3],
+    ["grade-2", counts.grade2, 2],
+    ["grade-1", counts.grade1, 1],
+  ].forEach(([id, count, grade]) => {
     const section = document.getElementById(id);
     if (!section) return;
     const countEl = section.querySelector(".members-count");
+    const extraOther = gradeOther(grade);
     if (countEl) {
       countEl.textContent = extraOther > 0 ? `${count}名＋他${extraOther}名` : `${count}名`;
     }
@@ -94,25 +108,26 @@ function updateSummaryCounts(counts, otherCount = 0) {
     if (text.includes("3年生") && counts.grade3 != null) {
       chip.innerHTML = `3年生 <strong>${counts.grade3}</strong>名`;
     } else if (text.includes("2年生") && counts.grade2 != null) {
-      chip.innerHTML = `2年生 <strong>${counts.grade2}</strong>名`;
+      const suffix = gradeOther(2) > 0 ? `＋他${gradeOther(2)}` : "";
+      chip.innerHTML = `2年生 <strong>${counts.grade2}</strong>名${suffix}`;
     } else if (text.includes("1年生") && counts.grade1 != null) {
-      const suffix = otherCount > 0 ? `＋他${otherCount}` : "";
+      const suffix = gradeOther(1) > 0 ? `＋他${gradeOther(1)}` : "";
       chip.innerHTML = `1年生 <strong>${counts.grade1}</strong>名${suffix}`;
     } else if (chip.classList.contains("summary-chip--total") && counts.total != null) {
-      const listed = counts.listed ?? counts.total;
+      const listed = counts.listed ?? counts.total - otherTotal;
       chip.innerHTML =
-        otherCount > 0
-          ? `紹介 <strong>${listed}</strong>名＋他<strong>${otherCount}</strong>名`
+        otherTotal > 0
+          ? `紹介 <strong>${listed}</strong>名＋他<strong>${otherTotal}</strong>名`
           : `合計 <strong>${counts.total}</strong>名`;
     }
   });
 
   const leadEl = document.querySelector(".members-hero-lead");
   if (leadEl && counts.total != null) {
-    const listed = counts.listed ?? counts.total - otherCount;
+    const listed = counts.listed ?? counts.total - otherTotal;
     leadEl.textContent =
-      otherCount > 0
-        ? `広島大学 ESS ドラマセクションの${listed}名を紹介（他${otherCount}名）。公演・練習・イベント、全部がESSドラマの日常です。`
+      otherTotal > 0
+        ? `広島大学 ESS ドラマセクションの${listed}名を紹介（他${otherTotal}名）。公演・練習・イベント、全部がESSドラマの日常です。`
         : `広島大学 ESS ドラマセクションの${counts.total}人。公演・練習・イベント、全部がESSドラマの日常です。`;
   }
 }
@@ -129,8 +144,9 @@ async function loadMembers() {
     if (!response.ok) throw new Error("members.json not found");
     const data = await response.json();
     const members = data.members || [];
+    const otherByGrade = normalizeOtherByGrade(data);
 
-    updateSummaryCounts(data.counts, data.otherCount || 0);
+    updateSummaryCounts(data.counts, otherByGrade);
 
     Object.values(containers).forEach((el) => {
       if (el) el.innerHTML = "";
@@ -142,9 +158,13 @@ async function loadMembers() {
       container.appendChild(createMemberCard(member));
     });
 
-    if (data.otherCount > 0 && containers[1]) {
-      containers[1].appendChild(createOtherMemberCard());
-    }
+    Object.entries(otherByGrade).forEach(([grade, count]) => {
+      const container = containers[Number(grade)];
+      if (!container) return;
+      for (let i = 0; i < count; i += 1) {
+        container.appendChild(createOtherMemberCard(Number(grade)));
+      }
+    });
 
     document.querySelectorAll(".member-card").forEach((el) => {
       if (typeof IntersectionObserver !== "undefined") {

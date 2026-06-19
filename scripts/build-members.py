@@ -21,8 +21,11 @@ WEBSITE = ROOT / "website"
 PHOTO_DST = WEBSITE / "assets" / "members"
 JSON_OUT = WEBSITE / "data" / "members.json"
 
-OTHER_MEMBER_COUNT = 1
-EXCLUDED_PHOTOS = {31}
+OTHER_BY_GRADE = {
+    1: 1,  # photo 31
+    2: 1,  # photo 16
+}
+EXCLUDED_PHOTOS = {16, 31}
 
 SECTION_GRADES = {
     "三年生": 3,
@@ -145,15 +148,18 @@ def main() -> None:
         if member["grade"] in counts:
             counts[member["grade"]] += 1
 
+    other_total = sum(OTHER_BY_GRADE.values())
+
     payload = {
         "source": XLSX.name,
-        "otherCount": OTHER_MEMBER_COUNT,
+        "otherByGrade": {str(grade): count for grade, count in OTHER_BY_GRADE.items()},
+        "otherCount": other_total,
         "counts": {
             "grade3": counts[3],
             "grade2": counts[2],
             "grade1": counts[1],
             "listed": len(members),
-            "total": len(members) + OTHER_MEMBER_COUNT,
+            "total": len(members) + other_total,
         },
         "members": members,
     }
