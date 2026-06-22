@@ -11,6 +11,7 @@ from pathlib import Path
 
 try:
     import openpyxl
+    from openpyxl.utils.datetime import from_excel
 except ImportError:
     print("openpyxl が必要です: pip install openpyxl")
     sys.exit(1)
@@ -30,7 +31,7 @@ HEADER_ALIASES = {
     "title": {"タイトル", "題名", "title", "Title"},
     "author": {"担当", "担当者", "著者", "活動報告担当", "author", "Author"},
     "comment": {"コメント", "comment", "Comment", "一言", "感想"},
-    "body": {"本文", "内容", "活動内容", "レポート", "body", "Body"},
+    "body": {"本文", "内容", "活動内容", "活動報告", "レポート", "body", "Body"},
     "photo": {"写真", "photo", "Photo", "画像"},
 }
 
@@ -50,6 +51,16 @@ def parse_date(value) -> date | None:
     if isinstance(value, date):
         return value
 
+    if isinstance(value, (int, float)):
+        try:
+            parsed = from_excel(value)
+            if isinstance(parsed, datetime):
+                return parsed.date()
+            if isinstance(parsed, date):
+                return parsed
+        except (ValueError, OverflowError, OSError):
+            pass
+
     text = str(value).strip()
     for fmt in ("%Y-%m-%d", "%Y/%m/%d", "%Y.%m.%d"):
         try:
@@ -62,6 +73,14 @@ def parse_date(value) -> date | None:
         return date(int(match.group(1)), int(match.group(2)), int(match.group(3)))
 
     return None
+
+
+def resolve_report_date(date_value, photo_ref: str | None) -> date | None:
+    if photo_ref:
+        photo_date = photo_date_from_name(photo_ref)
+        if photo_date:
+            return photo_date
+    return parse_date(date_value)
 
 
 def date_label(value: date) -> str:
@@ -83,10 +102,22 @@ def parse_photo_ref(value, fallback_date: date | None = None) -> str | None:
 
 def photo_date_from_name(filename: str) -> date | None:
     stem = Path(filename).stem.replace("\u3000", " ").strip()
+
     match = re.search(r"(\d{8})$", stem)
     if match:
         digits = match.group(1)
         return date(int(digits[:4]), int(digits[4:6]), int(digits[6:8]))
+
+    match = re.search(r"(\d{6})", stem)
+    if match:
+        digits = match.group(1)
+        year = 2000 + int(digits[:2])
+        month = int(digits[2:4])
+        day = int(digits[4:6])
+        try:
+            return date(year, month, day)
+        except ValueError:
+            pass
 
     match = re.search(r"(\d{4})$", stem)
     if match:
@@ -133,20 +164,28 @@ def read_reports_from_excel() -> dict[date, dict]:
                 continue
 
         if header_map is None:
-            report_date = parse_date(row[0] if len(row) > 0 else None)
+            photo_ref = parse_photo_ref(row[3] if len(row) > 3 else row[4] if len(row) > 4 else None)
+            report_date = resolve_report_date(row[0] if len(row) > 0 else None, photo_ref)
             if report_date is None:
                 continue
+            has_title_column = len(row) > 4 and parse_photo_ref(row[4]) is not None
             reports[report_date] = {
                 "date": report_date,
-                "title": cell_text(row[1] if len(row) > 1 else ""),
-                "author": cell_text(row[2] if len(row) > 2 else ""),
-                "comment": cell_text(row[3] if len(row) > 3 else ""),
+                "title": cell_text(row[1]) if has_title_column else "",
+                "author": cell_text(row[2] if has_title_column else row[1]),
+                "comment": cell_text(row[3] if has_title_column else row[2]),
                 "body": "",
-                "photo_ref": parse_photo_ref(row[4] if len(row) > 4 else None, report_date),
+                "photo_ref": photo_ref,
             }
             continue
 
-        report_date = parse_date(row[header_map["date"]] if header_map["date"] < len(row) else None)
+        photo_ref = parse_photo_ref(
+            row[header_map["photo"]] if "photo" in header_map and header_map["photo"] < len(row) else None
+        )
+        report_date = resolve_report_date(
+            row[header_map["date"]] if header_map["date"] < len(row) else None,
+            photo_ref,
+        )
         if report_date is None:
             continue
 
@@ -163,10 +202,7 @@ def read_reports_from_excel() -> dict[date, dict]:
             "author": cell_text(row[header_map["author"]]) if "author" in header_map else "",
             "comment": comment or body,
             "body": body,
-            "photo_ref": parse_photo_ref(
-                row[header_map["photo"]] if "photo" in header_map and header_map["photo"] < len(row) else None,
-                report_date,
-            ),
+            "photo_ref": photo_ref,
         }
 
     return reports
@@ -250,6 +286,11 @@ def build_reports() -> list[dict]:
             candidate = PHOTO_SRC / photo_ref
             if candidate.exists():
                 photo_path = candidate
+            else:
+                for path in PHOTO_SRC.iterdir():
+                    if path.name.lower() == photo_ref.lower():
+                        photo_path = path
+                        break
 
         if photo_path is None:
             continue

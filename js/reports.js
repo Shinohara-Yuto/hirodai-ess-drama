@@ -27,7 +27,7 @@ function createReportCard(report, isLatest) {
           <dd class="report-author">${escapeHtml(report.author || "活動報告担当")}</dd>
         </div>
         <div class="report-detail">
-          <dt>コメント</dt>
+          <dt>活動報告</dt>
           <dd class="report-comment">${escapeHtml(report.comment || report.body || "")}</dd>
         </div>
       </dl>

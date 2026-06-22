@@ -162,7 +162,7 @@
       "name": "Genta",
       "faculty": "工学部三類",
       "hometown": "兵庫県",
-      "hobby": "",
+      "hobby": "ビートボックス（HBB）",
       "photo": 20
     },
     {
@@ -178,7 +178,7 @@
       "name": "Ruki",
       "faculty": "情報科学部",
       "hometown": "大阪府",
-      "hobby": "",
+      "hobby": "小説の執筆・長電話",
       "photo": 22
     },
     {
@@ -202,7 +202,7 @@
       "name": "Araki Yuto",
       "faculty": "経済学部",
       "hometown": "福岡県",
-      "hobby": "",
+      "hobby": "寺社仏閣巡り",
       "photo": 25
     },
     {
@@ -218,7 +218,7 @@
       "name": "Atuhiro",
       "faculty": "工学部三類",
       "hometown": "岡山県",
-      "hobby": "",
+      "hobby": "映画・散歩",
       "photo": 27
     },
     {
@@ -226,15 +226,15 @@
       "name": "Hayato",
       "faculty": "情報科学部",
       "hometown": "愛知県",
-      "hobby": "",
+      "hobby": "旅行・VTuberの配信を見ること",
       "photo": 28
     },
     {
       "grade": 1,
-      "name": "Kaduki",
+      "name": "Kazuki",
       "faculty": "経済学部",
       "hometown": "福岡県",
-      "hobby": "",
+      "hobby": "食べ歩き・ゲーム",
       "photo": 29
     },
     {
