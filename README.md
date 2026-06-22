@@ -123,8 +123,8 @@ website/
 ### Google にサイトを登録する手順
 
 1. [Google Search Console](https://search.google.com/search-console) にログイン
-2. プロパティに `https://shinohara-yuto.github.io/hirodai-ess-website/` を追加
-3. サイトマップ URL を登録: `https://shinohara-yuto.github.io/hirodai-ess-website/sitemap.xml`
+2. プロパティに `https://shinohara-yuto.github.io/hirodai-ess-drama/` を追加
+3. サイトマップ URL を登録: `https://shinohara-yuto.github.io/hirodai-ess-drama/sitemap.xml`
 4. Instagram のプロフィールリンクに公式サイト URL を載せる（被リンクになり SEO に有効）
 
 ※ 検索結果への反映には数日〜数週間かかることがあります。

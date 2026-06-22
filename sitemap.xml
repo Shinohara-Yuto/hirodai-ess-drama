@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://shinohara-yuto.github.io/hirodai-ess-website/</loc>
+    <loc>https://shinohara-yuto.github.io/hirodai-ess-drama/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://shinohara-yuto.github.io/hirodai-ess-website/members.html</loc>
+    <loc>https://shinohara-yuto.github.io/hirodai-ess-drama/members.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://shinohara-yuto.github.io/hirodai-ess-website/reports.html</loc>
+    <loc>https://shinohara-yuto.github.io/hirodai-ess-drama/reports.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
