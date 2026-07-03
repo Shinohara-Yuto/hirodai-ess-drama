@@ -53,7 +53,6 @@ function createMemberCard(member) {
 
   const metaParts = [];
   if (member.faculty) metaParts.push(escapeHtml(member.faculty));
-  if (member.hometown) metaParts.push(escapeHtml(member.hometown));
   const metaHtml = metaParts.length
     ? `<p class="member-meta">${metaParts.join(" ／ ")}</p>`
     : "";

@@ -120,7 +120,6 @@ def read_members_from_excel() -> list[dict]:
                 "grade": current_grade,
                 "name": first,
                 "faculty": cell_text(row, 1),
-                "hometown": cell_text(row, 2),
                 "hobby": cell_text(row, 3),
                 "photo": photo,
             }
