@@ -153,7 +153,7 @@ function initCountdown() {
   const el = document.getElementById("countdown-value");
   if (!el) return;
 
-  const target = new Date("2026-07-20T14:00:00+09:00");
+  const target = new Date("2027-01-16T14:00:00+09:00");
 
   function update() {
     const now = new Date();
