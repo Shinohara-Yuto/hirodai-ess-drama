@@ -244,7 +244,7 @@ function initReveal() {
   );
 
   document.querySelectorAll(
-    ".section-header, .about-text, .about-features li, .member-stats-link, .practice-card, .year-schedule, .perf-type-card, .production-card, .current-card, .faq-item, .join-card, .gallery-header, .gallery-highlights, .gallery-filters, .gallery-report-banner, .spotlight-card, .why-card, .voice-card, .hero-badge, .hero-countdown, .reports-guide"
+    ".section-header, .about-text, .about-features li, .member-stats-link, .practice-card, .year-schedule, .perf-type-card, .production-card, .current-card, .faq-item, .join-card, .gallery-header, .gallery-highlights, .gallery-filters, .gallery-report-banner, .spotlight-card, .why-card, .voice-card, .current-countdown, .reports-guide"
   ).forEach((el) => {
     el.classList.add("reveal");
     observer.observe(el);
