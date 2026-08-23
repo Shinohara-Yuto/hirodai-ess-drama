@@ -15,224 +15,224 @@
   "members": [
     {
       "grade": 3,
-      "name": "みかん",
+      "name": "Asano Rei",
       "faculty": "総合科学部",
       "hobby": "旅行・料理",
       "photo": 1
     },
     {
       "grade": 3,
-      "name": "あお",
+      "name": "Ayano",
       "faculty": "工学部三類",
       "hobby": "まだ模索中！広く浅く",
       "photo": 2
     },
     {
       "grade": 3,
-      "name": "こさめ",
+      "name": "Kosame",
       "faculty": "文学部",
       "hobby": "rock jazz makeup",
       "photo": 3
     },
     {
       "grade": 3,
-      "name": "もも",
+      "name": "Momoka",
       "faculty": "教育学部",
       "hobby": "ダンス",
       "photo": 4
     },
     {
       "grade": 3,
-      "name": "たいやき",
+      "name": "Taya",
       "faculty": "教育学部",
       "hobby": "キティさん集め",
       "photo": 5
     },
     {
       "grade": 3,
-      "name": "みゆ",
+      "name": "Miyu",
       "faculty": "教育学部",
       "hobby": "音楽・カフェ巡り",
       "photo": 6
     },
     {
       "grade": 3,
-      "name": "そーすけ",
+      "name": "Sosuke",
       "faculty": "理学部物理",
       "hobby": "サンリオ(クロミ)収集・メイク動画視聴",
       "photo": 7
     },
     {
       "grade": 3,
-      "name": "なお",
+      "name": "Nao",
       "faculty": "教育学部",
       "hobby": "映画鑑賞",
       "photo": 8
     },
     {
       "grade": 3,
-      "name": "りんたろー",
+      "name": "Rintaro",
       "faculty": "情報科学部",
       "hobby": "珈琲",
       "photo": 9
     },
     {
       "grade": 3,
-      "name": "なる",
+      "name": "Naruto",
       "faculty": "総合科学部",
       "hobby": "お絵描きと歌うこと",
       "photo": 10
     },
     {
       "grade": 2,
-      "name": "さっきー",
+      "name": "Saki",
       "faculty": "経済学部",
       "hobby": "散歩",
       "photo": 11
     },
     {
       "grade": 2,
-      "name": "けい",
+      "name": "Keito",
       "faculty": "工学部四類",
       "hobby": "野球観戦（中日ファン）・お菓子作り",
       "photo": 12
     },
     {
       "grade": 2,
-      "name": "はる",
+      "name": "Haru",
       "faculty": "工学部三類",
       "hobby": "仮面ライダー鑑賞・音楽・ダンス",
       "photo": 13
     },
     {
       "grade": 2,
-      "name": "ゆうと",
+      "name": "Shinohara Yuto",
       "faculty": "工学部一類",
       "hobby": "ディズニー・マラソン",
       "photo": 14
     },
     {
       "grade": 2,
-      "name": "りん",
+      "name": "Rin",
       "faculty": "経済学部",
       "hobby": "音楽を聴くこと（WEST.)",
       "photo": 15
     },
     {
       "grade": 2,
-      "name": "かんた",
+      "name": "Kanta",
       "faculty": "教育学部",
       "hobby": "白米の大食い",
       "photo": 17
     },
     {
       "grade": 2,
-      "name": "ちな",
+      "name": "Chinami",
       "faculty": "教育学部",
       "hobby": "英語ディベートの妖精",
       "photo": 18
     },
     {
       "grade": 1,
-      "name": "びー",
+      "name": "Bea",
       "faculty": "生物生産学部",
       "hobby": "音楽を聴くこと",
       "photo": 19
     },
     {
       "grade": 1,
-      "name": "げん",
+      "name": "Genta",
       "faculty": "工学部三類",
       "hobby": "ビートボックス（HBB）",
       "photo": 20
     },
     {
       "grade": 1,
-      "name": "かん",
+      "name": "Kan",
       "faculty": "経済学部",
       "hobby": "アニメ漫画・料理・スポーツ",
       "photo": 21
     },
     {
       "grade": 1,
-      "name": "るき",
+      "name": "Ruki",
       "faculty": "情報科学部",
       "hobby": "小説の執筆・長電話",
       "photo": 22
     },
     {
       "grade": 1,
-      "name": "まりあ",
+      "name": "Maria",
       "faculty": "教育学部",
       "hobby": "歌・ダンス",
       "photo": 23
     },
     {
       "grade": 1,
-      "name": "れい",
+      "name": "Tomomatsu Rei",
       "faculty": "情報科学部",
       "hobby": "ラーメン巡り・カラオケ",
       "photo": 24
     },
     {
       "grade": 1,
-      "name": "あらき",
+      "name": "Araki Yuto",
       "faculty": "経済学部",
       "hobby": "寺社仏閣巡り",
       "photo": 25
     },
     {
       "grade": 1,
-      "name": "あみ",
+      "name": "Seno Ami",
       "faculty": "教育学部",
       "hobby": "アナ雪を見ること(特に2)",
       "photo": 26
     },
     {
       "grade": 1,
-      "name": "あつ",
+      "name": "Atsuhiro",
       "faculty": "工学部三類",
       "hobby": "映画・散歩",
       "photo": 27
     },
     {
       "grade": 1,
-      "name": "はやと",
+      "name": "Hayato",
       "faculty": "情報科学部",
       "hobby": "旅行・VTuberの配信を見ること",
       "photo": 28
     },
     {
       "grade": 1,
-      "name": "かず",
+      "name": "Kazuki",
       "faculty": "経済学部",
       "hobby": "食べ歩き・ゲーム",
       "photo": 29
     },
     {
       "grade": 1,
-      "name": "りょう",
+      "name": "Ryosuke",
       "faculty": "経済学部",
       "hobby": "散歩・アニメ鑑賞",
       "photo": 30
     },
     {
       "grade": 1,
-      "name": "まなべ",
+      "name": "Manabe Ami",
       "faculty": "教育学部",
       "hobby": "オタク活動・Netflix鑑賞",
       "photo": 32
     },
     {
       "grade": 1,
-      "name": "もか",
+      "name": "Fukamati Momoka",
       "faculty": "工学部特別コース",
       "hobby": "音楽(JとKpop)・ピクミンと歩くこと",
       "photo": 33
     },
     {
       "grade": 1,
-      "name": "あや",
+      "name": "Ayaka",
       "faculty": "教育学部",
       "hobby": "お菓子作り・絵を描くこと",
       "photo": 34
