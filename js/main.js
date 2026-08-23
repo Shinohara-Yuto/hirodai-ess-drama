@@ -251,9 +251,60 @@ function initReveal() {
   });
 }
 
+function escapeSponsorHtml(text) {
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+async function initSponsors() {
+  const grid = document.getElementById("sponsors-grid");
+  if (!grid) return;
+
+  try {
+    const response = await fetch("data/sponsors.json");
+    if (!response.ok) throw new Error("sponsors.json not found");
+    const data = await response.json();
+    const sponsors = Array.isArray(data.sponsors) ? data.sponsors : [];
+
+    if (sponsors.length === 0) {
+      grid.innerHTML = '<p class="sponsors-empty">協賛企業を募集しています。</p>';
+      return;
+    }
+
+    grid.innerHTML = "";
+    sponsors.forEach((sponsor) => {
+      const hasImage = Boolean(sponsor.image);
+      const name = sponsor.name || "協賛企業";
+      const el = document.createElement(sponsor.url ? "a" : "div");
+      el.className = `sponsor-banner${hasImage ? "" : " sponsor-banner--placeholder"}`;
+      if (sponsor.url) {
+        el.href = sponsor.url;
+        if (/^https?:\/\//i.test(sponsor.url)) {
+          el.target = "_blank";
+          el.rel = "noopener noreferrer";
+        }
+      }
+      el.setAttribute("aria-label", name);
+
+      if (hasImage) {
+        el.innerHTML = `<img src="${escapeSponsorHtml(sponsor.image)}" alt="${escapeSponsorHtml(name)}" loading="lazy">`;
+      } else {
+        el.innerHTML = `<span class="sponsor-banner-label">${escapeSponsorHtml(name)}</span>`;
+      }
+
+      grid.appendChild(el);
+    });
+  } catch (error) {
+    console.error(error);
+    grid.innerHTML = '<p class="sponsors-empty">協賛企業を募集しています。</p>';
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initCountdown();
   initGallery();
+  initSponsors();
   initNav();
   initReveal();
   syncAnnounceHeight();
