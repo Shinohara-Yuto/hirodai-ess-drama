@@ -50,9 +50,9 @@
       {
         "@type": "Event",
         "@id": "https://shinohara-yuto.github.io/hirodai-ess-drama/#event-honkouen-2026",
-        "name": "2026 本公演 The Greatest Showman",
-        "description": "広島大学 ESS ドラマセクション 本公演。The Greatest Showman を全学年が一丸となって上演する一年間の集大成。",
-        "startDate": "2027-01-16T14:00:00+09:00",
+        "name": "2026年度 本公演 The Greatest Showman",
+        "description": "広島大学 ESS ドラマセクション 本公演。The Greatest Showman を全学年が一丸となって上演する一年間の集大成。開演時刻は決まり次第お知らせします。",
+        "startDate": "2027-01-16",
         "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
         "eventStatus": "https://schema.org/EventScheduled",
         "location": {
@@ -103,9 +103,9 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="theme-circus intro-pending">
-  <div class="page-intro" id="page-intro" role="presentation" aria-hidden="true">
-    <div class="page-intro-mosaic" id="page-intro-mosaic"></div>
-    <div class="page-intro-veil"></div>
+  <div class="page-intro" id="page-intro" role="dialog" aria-modal="true" aria-label="サイト紹介">
+    <div class="page-intro-mosaic" id="page-intro-mosaic" aria-hidden="true"></div>
+    <div class="page-intro-veil" aria-hidden="true"></div>
     <div class="page-intro-copy">
       <p class="page-intro-brand">ESS</p>
       <p class="page-intro-line">英語で、舞台をつくる。</p>
@@ -144,7 +144,7 @@
   <main>
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-bg" aria-hidden="true">
-        <img src="assets/gallery/honkouen-1.jpg" alt="" class="hero-bg-image">
+        <img src="assets/gallery/honkouen-1.jpg" alt="" class="hero-bg-image" width="1600" height="900" fetchpriority="high" decoding="async">
         <div class="hero-stripes"></div>
         <div class="hero-spotlight"></div>
       </div>
@@ -179,7 +179,7 @@
             </div>
           </div>
           <div class="current-info">
-            <p class="current-eyebrow">2026 DRAMA 本公演</p>
+            <p class="current-eyebrow">2026年度 本公演</p>
             <h3 class="current-title current-title--show">The Greatest Showman</h3>
             <p class="current-subtitle">グレイテスト・ショーマン</p>
             <p class="current-desc">
@@ -205,7 +205,7 @@
               </div>
               <div>
                 <dt>開演</dt>
-                <dd>詳細は決まり次第お知らせ</dd>
+                <dd>時刻は決まり次第お知らせ</dd>
               </div>
               <div class="current-details-full">
                 <dt>お問い合わせ</dt>
@@ -353,7 +353,7 @@
             </div>
           </div>
           <ol class="year-schedule-list">
-            <li class="year-schedule-row year-schedule-row--current">
+            <li class="year-schedule-row">
               <div class="year-schedule-date"><span>1月</span></div>
               <div class="year-schedule-body">
                 <article class="year-schedule-chip year-schedule-chip--performance">
@@ -424,7 +424,7 @@
                 </article>
               </div>
             </li>
-            <li class="year-schedule-row">
+            <li class="year-schedule-row year-schedule-row--current">
               <div class="year-schedule-date"><span>10月</span></div>
               <div class="year-schedule-body">
                 <article class="year-schedule-chip year-schedule-chip--prep">
@@ -587,12 +587,12 @@
           <a href="reports.html" class="btn btn-primary">活動報告を読む</a>
         </div>
 
-        <div class="gallery-filters reveal" role="tablist" aria-label="写真カテゴリー">
-          <button class="gallery-filter is-active" type="button" data-filter="all" role="tab" aria-selected="true">すべて</button>
-          <button class="gallery-filter" type="button" data-filter="performance" role="tab" aria-selected="false">公演</button>
-          <button class="gallery-filter" type="button" data-filter="rehearsal" role="tab" aria-selected="false">練習</button>
-          <button class="gallery-filter" type="button" data-filter="event" role="tab" aria-selected="false">イベント</button>
-          <button class="gallery-filter" type="button" data-filter="daily" role="tab" aria-selected="false">日常</button>
+        <div class="gallery-filters reveal" role="group" aria-label="写真カテゴリー">
+          <button class="gallery-filter is-active" type="button" data-filter="all" aria-pressed="true">すべて</button>
+          <button class="gallery-filter" type="button" data-filter="performance" aria-pressed="false">公演</button>
+          <button class="gallery-filter" type="button" data-filter="rehearsal" aria-pressed="false">練習</button>
+          <button class="gallery-filter" type="button" data-filter="event" aria-pressed="false">イベント</button>
+          <button class="gallery-filter" type="button" data-filter="daily" aria-pressed="false">日常</button>
         </div>
 
         <div class="gallery-grid" id="gallery-grid" aria-live="polite"></div>
@@ -668,7 +668,7 @@
           <div class="join-content">
             <span class="section-label section-label--light">Join Us</span>
             <h2 id="join-heading" class="join-title">まずは見学だけでも、大歓迎です</h2>
-            <p class="join-period"><strong>新歓期間：4月3日 〜 5月17日</strong>（期間外の見学も相談OK）</p>
+            <p class="join-period"><strong>通年で見学OK</strong>　／　練習は毎週 月・水・金 18:00〜</p>
             <p class="join-text">
               キャストもスタッフも募集中。友達ができて、舞台ができて、大学生活の軸ができる。
               英語や演劇の経験は不要です。気になったら、InstagramのDMへ。
@@ -678,6 +678,7 @@
               <li>スタッフ（音響・照明・ディレクター・衣装・制作など）</li>
             </ul>
             <ul class="join-notes">
+              <li>新歓期間の目安：4月3日 〜 5月17日（期間外も歓迎）</li>
               <li>入会条件：広島大学の学生・院生</li>
               <li>会費：1年目 3,000円 ／ 2年目以降 5,000円</li>
               <li>本公演活動費：別途（年によって異なる）</li>
@@ -698,6 +699,15 @@
     </section>
   </main>
 
+  <section class="sponsors" id="sponsors" aria-labelledby="sponsors-heading">
+    <div class="sponsors-head">
+      <p class="sponsors-kicker">Sponsors</p>
+      <h2 id="sponsors-heading" class="sponsors-title">本公演 協賛企業</h2>
+      <p class="sponsors-lead">The Greatest Showman を応援してくださる企業・団体の皆様。協賛のご相談も歓迎です。</p>
+    </div>
+    <div class="sponsors-grid" id="sponsors-grid"></div>
+  </section>
+
   <footer class="site-footer">
     <div class="container footer-grid">
       <div class="footer-brand">
@@ -708,13 +718,13 @@
       <nav class="footer-nav" aria-label="フッターナビ">
         <p class="footer-nav-title">サイトマップ</p>
         <ul>
-          <li><a href="#about">About</a></li>
-          <li><a href="#current">最新公演</a></li>
+          <li><a href="#join">新歓</a></li>
+          <li><a href="#current">本公演</a></li>
           <li><a href="members.html">Members</a></li>
           <li><a href="reports.html">活動報告</a></li>
           <li><a href="#gallery">Gallery</a></li>
           <li><a href="#sponsors">スポンサー</a></li>
-          <li><a href="#join">Join Us</a></li>
+          <li><a href="#faq">FAQ</a></li>
         </ul>
       </nav>
       <div class="footer-cta">
@@ -728,15 +738,6 @@
       <p class="footer-copy">&copy; 2026 広島大学 ESS ドラマセクション</p>
     </div>
   </footer>
-
-  <section class="sponsors" id="sponsors" aria-labelledby="sponsors-heading">
-    <div class="sponsors-head">
-      <p class="sponsors-kicker">Sponsors</p>
-      <h2 id="sponsors-heading" class="sponsors-title">本公演 協賛企業</h2>
-      <p class="sponsors-lead">The Greatest Showman を応援してくださる企業・団体の皆様</p>
-    </div>
-    <div class="sponsors-grid" id="sponsors-grid"></div>
-  </section>
 
   <script src="js/main.js"></script>
 </body>

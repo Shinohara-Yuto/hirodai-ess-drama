@@ -1,10 +1,22 @@
 let galleryItems = [];
+let galleryFilter = "all";
 let lightboxIndex = 0;
+let lightboxVisibleIndices = [];
+let countdownTimer = null;
 
 function sizeClass(size) {
   if (size === "hero") return "gallery-item--hero";
   if (size === "wide") return "gallery-item--wide";
   return "";
+}
+
+function getVisibleGalleryIndices(filter = galleryFilter) {
+  if (filter === "all") {
+    return galleryItems.map((_, index) => index);
+  }
+  return galleryItems
+    .map((item, index) => (item.category === filter ? index : -1))
+    .filter((index) => index >= 0);
 }
 
 function createGalleryItem(item, index) {
@@ -33,15 +45,12 @@ function renderGallery(filter = "all") {
   const grid = document.getElementById("gallery-grid");
   if (!grid) return;
 
+  galleryFilter = filter;
   grid.innerHTML = "";
-  const visibleItems =
-    filter === "all"
-      ? galleryItems
-      : galleryItems.filter((item) => item.category === filter);
+  const visibleIndices = getVisibleGalleryIndices(filter);
 
-  visibleItems.forEach((item) => {
-    const globalIndex = galleryItems.indexOf(item);
-    grid.appendChild(createGalleryItem(item, globalIndex));
+  visibleIndices.forEach((globalIndex) => {
+    grid.appendChild(createGalleryItem(galleryItems[globalIndex], globalIndex));
   });
 
   observeGalleryItems();
@@ -65,10 +74,10 @@ function initGalleryFilters() {
     btn.addEventListener("click", () => {
       document.querySelectorAll(".gallery-filter").forEach((b) => {
         b.classList.remove("is-active");
-        b.setAttribute("aria-selected", "false");
+        b.setAttribute("aria-pressed", "false");
       });
       btn.classList.add("is-active");
-      btn.setAttribute("aria-selected", "true");
+      btn.setAttribute("aria-pressed", "true");
       renderGallery(btn.dataset.filter);
     });
   });
@@ -80,6 +89,9 @@ function ensureLightbox() {
 
   lightbox = document.createElement("div");
   lightbox.className = "lightbox";
+  lightbox.setAttribute("role", "dialog");
+  lightbox.setAttribute("aria-modal", "true");
+  lightbox.setAttribute("aria-label", "写真ギャラリー");
   lightbox.innerHTML = `
     <button class="lightbox-close" type="button" aria-label="閉じる">&times;</button>
     <button class="lightbox-nav lightbox-nav--prev" type="button" aria-label="前の写真">&#8249;</button>
@@ -119,10 +131,15 @@ function ensureLightbox() {
 
 function openLightbox(index) {
   const lightbox = ensureLightbox();
+  lightboxVisibleIndices = getVisibleGalleryIndices();
+  if (!lightboxVisibleIndices.includes(index)) {
+    lightboxVisibleIndices = getVisibleGalleryIndices("all");
+  }
   lightboxIndex = index;
   updateLightboxContent();
   lightbox.classList.add("active");
   document.body.style.overflow = "hidden";
+  lightbox.querySelector(".lightbox-close").focus();
 }
 
 function closeLightbox() {
@@ -133,7 +150,16 @@ function closeLightbox() {
 }
 
 function navigateLightbox(direction) {
-  lightboxIndex = (lightboxIndex + direction + galleryItems.length) % galleryItems.length;
+  const list =
+    lightboxVisibleIndices.length > 0
+      ? lightboxVisibleIndices
+      : galleryItems.map((_, index) => index);
+  if (list.length === 0) return;
+
+  let position = list.indexOf(lightboxIndex);
+  if (position < 0) position = 0;
+  position = (position + direction + list.length) % list.length;
+  lightboxIndex = list[position];
   updateLightboxContent();
 }
 
@@ -153,14 +179,19 @@ function initCountdown() {
   const el = document.getElementById("countdown-value");
   if (!el) return;
 
-  const target = new Date("2027-01-16T14:00:00+09:00");
+  const target = new Date("2027-01-16T00:00:00+09:00");
 
   function update() {
     const now = new Date();
     const diff = target - now;
 
     if (diff <= 0) {
-      el.textContent = "本日開演！";
+      const endOfDay = new Date("2027-01-16T23:59:59+09:00");
+      el.textContent = now <= endOfDay ? "本日開演！" : "公演終了ありがとうございました";
+      if (countdownTimer) {
+        clearInterval(countdownTimer);
+        countdownTimer = null;
+      }
       return;
     }
 
@@ -176,7 +207,7 @@ function initCountdown() {
   }
 
   update();
-  setInterval(update, 60000);
+  countdownTimer = setInterval(update, 60000);
 }
 
 async function initGallery() {
@@ -198,7 +229,10 @@ async function initGallery() {
 
 function syncAnnounceHeight() {
   const bar = document.querySelector(".announce-bar");
-  if (!bar) return;
+  if (!bar) {
+    document.documentElement.style.setProperty("--announce-height", "0px");
+    return;
+  }
 
   if (window.matchMedia("(max-width: 600px)").matches) {
     document.documentElement.style.setProperty("--announce-height", `${bar.offsetHeight}px`);
@@ -207,26 +241,37 @@ function syncAnnounceHeight() {
   }
 }
 
+function setNavOpen(links, toggle, isOpen) {
+  links.classList.toggle("open", isOpen);
+  toggle.classList.toggle("active", isOpen);
+  toggle.setAttribute("aria-expanded", String(isOpen));
+  toggle.setAttribute("aria-label", isOpen ? "メニューを閉じる" : "メニューを開く");
+  if (isOpen) {
+    links.removeAttribute("inert");
+  } else {
+    links.setAttribute("inert", "");
+  }
+}
+
 function initNav() {
   const header = document.querySelector(".site-header");
   const toggle = document.querySelector(".nav-toggle");
   const links = document.querySelector(".nav-links");
+  if (!header || !toggle || !links) return;
+
+  setNavOpen(links, toggle, false);
 
   window.addEventListener("scroll", () => {
     header.classList.toggle("scrolled", window.scrollY > 50);
   });
 
   toggle.addEventListener("click", () => {
-    const isOpen = links.classList.toggle("open");
-    toggle.classList.toggle("active", isOpen);
-    toggle.setAttribute("aria-expanded", isOpen);
+    setNavOpen(links, toggle, !links.classList.contains("open"));
   });
 
   links.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {
-      links.classList.remove("open");
-      toggle.classList.remove("active");
-      toggle.setAttribute("aria-expanded", "false");
+      setNavOpen(links, toggle, false);
     });
   });
 }
@@ -303,11 +348,30 @@ async function initSponsors() {
 
 function finishPageIntro() {
   const intro = document.getElementById("page-intro");
+  const hash = window.location.hash;
   document.body.classList.remove("intro-pending");
-  if (!intro) return;
+  try {
+    sessionStorage.setItem("ess-intro-seen", "1");
+  } catch (_) {
+    /* ignore */
+  }
+
+  if (!intro) {
+    if (hash) {
+      const target = document.querySelector(hash);
+      if (target) target.scrollIntoView();
+    }
+    return;
+  }
+
   intro.classList.add("is-done");
+  intro.setAttribute("aria-hidden", "true");
   window.setTimeout(() => {
     intro.remove();
+    if (hash) {
+      const target = document.querySelector(hash);
+      if (target) target.scrollIntoView();
+    }
   }, 800);
 }
 
@@ -319,7 +383,19 @@ function initPageIntro() {
     return;
   }
 
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  let seen = false;
+  try {
+    seen = sessionStorage.getItem("ess-intro-seen") === "1";
+  } catch (_) {
+    seen = false;
+  }
+
+  const shouldSkip =
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+    Boolean(window.location.hash) ||
+    seen;
+
+  if (shouldSkip) {
     finishPageIntro();
     return;
   }
@@ -329,8 +405,6 @@ function initPageIntro() {
     "assets/gallery/remecon-1.jpg",
     "assets/gallery/spring2026.jpg",
     "assets/gallery/remecon-4.jpg",
-    "assets/gallery/festival-1.jpg",
-    "assets/gallery/halloween-2025.jpg",
   ];
 
   mosaic.innerHTML = photos
@@ -341,18 +415,21 @@ function initPageIntro() {
     .join("");
 
   const skip = document.getElementById("page-intro-skip");
-  if (skip) skip.addEventListener("click", finishPageIntro);
+  if (skip) {
+    skip.addEventListener("click", finishPageIntro);
+    window.setTimeout(() => skip.focus(), 50);
+  }
 
-  window.setTimeout(finishPageIntro, 2800);
+  window.setTimeout(finishPageIntro, 2600);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  syncAnnounceHeight();
   initPageIntro();
   initCountdown();
   initGallery();
   initSponsors();
   initNav();
   initReveal();
-  syncAnnounceHeight();
   window.addEventListener("resize", syncAnnounceHeight);
 });
