@@ -301,7 +301,53 @@ async function initSponsors() {
   }
 }
 
+function finishPageIntro() {
+  const intro = document.getElementById("page-intro");
+  document.body.classList.remove("intro-pending");
+  if (!intro) return;
+  intro.classList.add("is-done");
+  window.setTimeout(() => {
+    intro.remove();
+  }, 800);
+}
+
+function initPageIntro() {
+  const intro = document.getElementById("page-intro");
+  const mosaic = document.getElementById("page-intro-mosaic");
+  if (!intro || !mosaic) {
+    document.body.classList.remove("intro-pending");
+    return;
+  }
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    finishPageIntro();
+    return;
+  }
+
+  const photos = [
+    "assets/gallery/honkouen-1.jpg",
+    "assets/gallery/remecon-1.jpg",
+    "assets/gallery/spring2026.jpg",
+    "assets/gallery/remecon-4.jpg",
+    "assets/gallery/festival-1.jpg",
+    "assets/gallery/halloween-2025.jpg",
+  ];
+
+  mosaic.innerHTML = photos
+    .map(
+      (src) =>
+        `<div class="page-intro-tile"><img src="${src}" alt="" decoding="async"></div>`
+    )
+    .join("");
+
+  const skip = document.getElementById("page-intro-skip");
+  if (skip) skip.addEventListener("click", finishPageIntro);
+
+  window.setTimeout(finishPageIntro, 2800);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  initPageIntro();
   initCountdown();
   initGallery();
   initSponsors();

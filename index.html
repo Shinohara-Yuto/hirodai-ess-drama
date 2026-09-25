@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="広島大学 ESS（English Speaking Society）ドラマセクション公式サイト。次の公演は2027年1月16日 本公演 The Greatest Showman。英語で演劇・ミュージカルを上演。新歓・見学歓迎。">
-  <meta name="keywords" content="広島大学 ESS, 広島大学ESS, ヒロダイ ESS, 広島大学 英語サークル, 広島大学 演劇, 広島大学 ミュージカル, The Greatest Showman, English Speaking Society, ドラマセクション, 新歓">
+  <meta name="description" content="広島大学 ESS ドラマセクション公式サイト。英語が苦手でも演劇未経験でも大丈夫。新入生歓迎・見学OK。次の公演は2027年1月16日 本公演 The Greatest Showman。">
+  <meta name="keywords" content="広島大学 ESS, 広島大学ESS, ヒロダイ ESS, 広島大学 英語サークル, 広島大学 演劇, 広島大学 ミュージカル, The Greatest Showman, 新歓, 新入生">
   <meta name="robots" content="index, follow">
   <meta name="google-site-verification" content="NtsRxyaLdXXmO3iJF8ZyyDlZb_Qxucu5oCQzhPY67l8" />
   <link rel="canonical" href="https://shinohara-yuto.github.io/hirodai-ess-drama/">
@@ -102,12 +102,22 @@
   <link href="https://fonts.googleapis.com/css2?family=Limelight&family=Shippori+Mincho:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="theme-circus">
+<body class="theme-circus intro-pending">
+  <div class="page-intro" id="page-intro" role="presentation" aria-hidden="true">
+    <div class="page-intro-mosaic" id="page-intro-mosaic"></div>
+    <div class="page-intro-veil"></div>
+    <div class="page-intro-copy">
+      <p class="page-intro-brand">ESS</p>
+      <p class="page-intro-line">英語で、舞台をつくる。</p>
+    </div>
+    <button type="button" class="page-intro-skip" id="page-intro-skip">スキップ</button>
+  </div>
+
   <div class="announce-bar" role="region" aria-label="最新のお知らせ">
     <div class="announce-bar-inner container">
-      <span class="announce-badge">NEXT SHOW</span>
-      <p class="announce-text">本公演 <strong>The Greatest Showman</strong> — 2027年1月16日（土）アザレアホール</p>
-      <a href="#current" class="announce-link">詳細へ</a>
+      <span class="announce-badge">新入生歓迎</span>
+      <p class="announce-text">英語が苦手でも大丈夫 — <strong>見学だけでもOK</strong>。まずは気軽に来てみて</p>
+      <a href="#join" class="announce-link">新歓へ</a>
     </div>
   </div>
 
@@ -118,15 +128,15 @@
         <span></span><span></span><span></span>
       </button>
       <ul class="nav-links">
+        <li><a href="#join">新歓</a></li>
+        <li><a href="#why">1年生へ</a></li>
+        <li><a href="#current">本公演</a></li>
         <li><a href="#about">About</a></li>
-        <li><a href="#schedule">Schedule</a></li>
-        <li><a href="#performances">公演</a></li>
-        <li><a href="#current">最新公演</a></li>
         <li><a href="members.html">Members</a></li>
         <li><a href="reports.html">活動報告</a></li>
         <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#sponsors">スポンサー</a></li>
         <li><a href="#faq">FAQ</a></li>
-        <li><a href="#join">Join Us</a></li>
       </ul>
     </nav>
   </header>
@@ -140,11 +150,11 @@
       </div>
       <div class="hero-content">
         <p class="hero-brand"><span class="hero-brand-campus">広島大学</span> ESS</p>
-        <h1 id="hero-title" class="hero-title">The Greatest Showman</h1>
-        <p class="hero-lead">英語ミュージカルのサーカスが、東広島にやってくる。</p>
+        <h1 id="hero-title" class="hero-title">大学、最初の舞台はここから。</h1>
+        <p class="hero-lead">英語が苦手でも、演劇未経験でも大丈夫。まずは見学から始めよう。</p>
         <div class="hero-actions">
-          <a href="#current" class="btn btn-primary">公演を見る</a>
-          <a href="#join" class="btn btn-outline btn-outline-light">新歓・見学</a>
+          <a href="#join" class="btn btn-primary">新歓・見学はこちら</a>
+          <a href="#current" class="btn btn-outline btn-outline-light">本公演を見る</a>
         </div>
       </div>
       <div class="hero-scroll" aria-hidden="true">
@@ -286,8 +296,8 @@
       <div class="container">
         <div class="section-header">
           <span class="section-label">Why ESS?</span>
-          <h2 id="why-heading" class="section-title">ESSドラマが選ばれる理由</h2>
-          <p class="section-lead">「英語ができない」「演劇経験がない」——それ、むしろ当たり前。だからこそ、ここでの経験は特別です。</p>
+          <h2 id="why-heading" class="section-title">新入生が安心して入れる理由</h2>
+          <p class="section-lead">「英語ができない」「演劇経験がない」「週3は無理」——その不安、ここに入る人のほとんどが持っています。</p>
         </div>
         <div class="why-grid">
           <article class="why-card reveal">
@@ -657,11 +667,11 @@
         <div class="join-card">
           <div class="join-content">
             <span class="section-label section-label--light">Join Us</span>
-            <h2 id="join-heading" class="join-title">サーカスの仲間になりませんか？</h2>
-            <p class="join-period"><strong>新歓期間：4月3日 〜 5月17日</strong></p>
+            <h2 id="join-heading" class="join-title">まずは見学だけでも、大歓迎です</h2>
+            <p class="join-period"><strong>新歓期間：4月3日 〜 5月17日</strong>（期間外の見学も相談OK）</p>
             <p class="join-text">
-              キャスト・スタッフともに募集中です。見学・体験にも気軽にお越しください。
-              英語や演劇の経験がなくても大丈夫。まずはお気軽にご連絡ください。
+              キャストもスタッフも募集中。友達ができて、舞台ができて、大学生活の軸ができる。
+              英語や演劇の経験は不要です。気になったら、InstagramのDMへ。
             </p>
             <ul class="join-roles">
               <li>キャスト（役者・歌手・ダンサー）</li>
@@ -719,7 +729,12 @@
     </div>
   </footer>
 
-  <section class="sponsors" id="sponsors" aria-label="協賛企業">
+  <section class="sponsors" id="sponsors" aria-labelledby="sponsors-heading">
+    <div class="sponsors-head">
+      <p class="sponsors-kicker">Sponsors</p>
+      <h2 id="sponsors-heading" class="sponsors-title">本公演 協賛企業</h2>
+      <p class="sponsors-lead">The Greatest Showman を応援してくださる企業・団体の皆様</p>
+    </div>
     <div class="sponsors-grid" id="sponsors-grid"></div>
   </section>
 
