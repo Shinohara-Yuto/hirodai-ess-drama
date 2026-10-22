@@ -22,20 +22,37 @@ function getVisibleGalleryIndices(filter = galleryFilter) {
 function createGalleryItem(item, index) {
   const el = document.createElement("button");
   el.type = "button";
-  el.className = `gallery-item reveal ${sizeClass(item.size)}`;
-  el.dataset.category = item.category;
+  const label = asPlainText(item.label, 80);
+  const caption = asPlainText(item.caption, 200);
+  el.className = `gallery-item reveal ${sizeClass(item.size)}`.trim();
+  el.dataset.category = asPlainText(item.category, 40);
   el.dataset.index = String(index);
-  el.setAttribute("aria-label", `${item.label}: ${item.caption}`);
+  el.setAttribute("aria-label", `${label}: ${caption}`);
 
-  const src = `assets/gallery/${item.file}`;
-  el.innerHTML = `
-    <img src="${src}" alt="${item.caption}" loading="lazy">
-    <span class="gallery-item-zoom" aria-hidden="true">+</span>
-    <span class="gallery-item-overlay">
-      <span class="gallery-item-label">${item.label}</span>
-      <span class="gallery-item-caption">${item.caption}</span>
-    </span>
-  `;
+  const src = safeImagePath(`assets/gallery/${asPlainText(item.file, 120)}`);
+  if (src) {
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = caption;
+    img.loading = "lazy";
+    el.appendChild(img);
+  }
+
+  const zoom = document.createElement("span");
+  zoom.className = "gallery-item-zoom";
+  zoom.setAttribute("aria-hidden", "true");
+  zoom.textContent = "+";
+
+  const overlay = document.createElement("span");
+  overlay.className = "gallery-item-overlay";
+  const labelEl = document.createElement("span");
+  labelEl.className = "gallery-item-label";
+  labelEl.textContent = label;
+  const captionEl = document.createElement("span");
+  captionEl.className = "gallery-item-caption";
+  captionEl.textContent = caption;
+  overlay.append(labelEl, captionEl);
+  el.append(zoom, overlay);
 
   el.addEventListener("click", () => openLightbox(index));
   return el;
@@ -168,11 +185,13 @@ function updateLightboxContent() {
   const item = galleryItems[lightboxIndex];
   if (!lightbox || !item) return;
 
-  const src = `assets/gallery/${item.file}`;
-  lightbox.querySelector("img").src = src;
-  lightbox.querySelector("img").alt = item.caption;
-  lightbox.querySelector(".lightbox-caption strong").textContent = item.label;
-  lightbox.querySelector(".lightbox-caption span").textContent = item.caption;
+  const src = safeImagePath(`assets/gallery/${asPlainText(item.file, 120)}`);
+  const img = lightbox.querySelector("img");
+  if (src) img.src = src;
+  else img.removeAttribute("src");
+  img.alt = asPlainText(item.caption, 200);
+  lightbox.querySelector(".lightbox-caption strong").textContent = asPlainText(item.label, 80);
+  lightbox.querySelector(".lightbox-caption span").textContent = asPlainText(item.caption, 200);
 }
 
 function initCountdown() {
@@ -218,12 +237,19 @@ async function initGallery() {
     const response = await fetch("data/gallery.json");
     if (!response.ok) throw new Error("gallery.json not found");
     const data = await response.json();
-    galleryItems = data.items || [];
+    if (!data || typeof data !== "object" || Array.isArray(data)) {
+      throw new Error("gallery.json is invalid");
+    }
+    galleryItems = Array.isArray(data.items) ? data.items.filter((item) => item && typeof item === "object") : [];
     renderGallery("all");
     initGalleryFilters();
   } catch (error) {
     console.error(error);
-    grid.innerHTML = '<p class="gallery-lead">写真を読み込めませんでした。</p>';
+    grid.replaceChildren();
+    const message = document.createElement("p");
+    message.className = "gallery-lead";
+    message.textContent = "写真を読み込めませんでした。";
+    grid.appendChild(message);
   }
 }
 
@@ -296,10 +322,12 @@ function initReveal() {
   });
 }
 
-function escapeSponsorHtml(text) {
-  const div = document.createElement("div");
-  div.textContent = text;
-  return div.innerHTML;
+function showSponsorsMessage(grid, message) {
+  grid.replaceChildren();
+  const p = document.createElement("p");
+  p.className = "sponsors-empty";
+  p.textContent = message;
+  grid.appendChild(p);
 }
 
 async function initSponsors() {
@@ -310,39 +338,51 @@ async function initSponsors() {
     const response = await fetch("data/sponsors.json");
     if (!response.ok) throw new Error("sponsors.json not found");
     const data = await response.json();
+    if (!data || typeof data !== "object" || Array.isArray(data)) {
+      throw new Error("sponsors.json is invalid");
+    }
     const sponsors = Array.isArray(data.sponsors) ? data.sponsors : [];
 
     if (sponsors.length === 0) {
-      grid.innerHTML = '<p class="sponsors-empty">協賛企業を募集しています。</p>';
+      showSponsorsMessage(grid, "協賛企業を募集しています。");
       return;
     }
 
-    grid.innerHTML = "";
+    grid.replaceChildren();
     sponsors.forEach((sponsor) => {
-      const hasImage = Boolean(sponsor.image);
-      const name = sponsor.name || "協賛企業";
-      const el = document.createElement(sponsor.url ? "a" : "div");
-      el.className = `sponsor-banner${hasImage ? "" : " sponsor-banner--placeholder"}`;
-      if (sponsor.url) {
-        el.href = sponsor.url;
-        if (/^https?:\/\//i.test(sponsor.url)) {
+      if (!sponsor || typeof sponsor !== "object") return;
+      const href = safeLink(sponsor.url);
+      const image = safeImagePath(asPlainText(sponsor.image, 240));
+      const name = asPlainText(sponsor.name, 80) || "協賛企業";
+      const el = document.createElement(href ? "a" : "div");
+      el.className = `sponsor-banner${image ? "" : " sponsor-banner--placeholder"}`;
+      if (href) {
+        el.href = href;
+        if (/^https:\/\//i.test(href)) {
           el.target = "_blank";
           el.rel = "noopener noreferrer";
         }
       }
       el.setAttribute("aria-label", name);
 
-      if (hasImage) {
-        el.innerHTML = `<img src="${escapeSponsorHtml(sponsor.image)}" alt="${escapeSponsorHtml(name)}" loading="lazy">`;
+      if (image) {
+        const img = document.createElement("img");
+        img.src = image;
+        img.alt = name;
+        img.loading = "lazy";
+        el.appendChild(img);
       } else {
-        el.innerHTML = `<span class="sponsor-banner-label">${escapeSponsorHtml(name)}</span>`;
+        const label = document.createElement("span");
+        label.className = "sponsor-banner-label";
+        label.textContent = name;
+        el.appendChild(label);
       }
 
       grid.appendChild(el);
     });
   } catch (error) {
     console.error(error);
-    grid.innerHTML = '<p class="sponsors-empty">協賛企業を募集しています。</p>';
+    showSponsorsMessage(grid, "協賛企業を募集しています。");
   }
 }
 
@@ -358,7 +398,7 @@ function finishPageIntro() {
 
   if (!intro) {
     if (hash) {
-      const target = document.querySelector(hash);
+      const target = elementByPageHash(hash);
       if (target) target.scrollIntoView();
     }
     return;
@@ -369,7 +409,7 @@ function finishPageIntro() {
   window.setTimeout(() => {
     intro.remove();
     if (hash) {
-      const target = document.querySelector(hash);
+      const target = elementByPageHash(hash);
       if (target) target.scrollIntoView();
     }
   }, 800);

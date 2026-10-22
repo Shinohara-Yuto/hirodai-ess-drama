@@ -36,10 +36,30 @@ HEADER_ALIASES = {
 }
 
 
+_PHOTO_NAME = re.compile(r"^(?=.{1,180}$)(?!\.)[\w .()-]+\.(?:jpg|jpeg|png|webp)$", re.IGNORECASE)
+
+
+def is_file_inside(root: Path, path: Path) -> bool:
+    try:
+        resolved = path.resolve()
+        resolved.relative_to(root.resolve())
+    except (OSError, ValueError):
+        return False
+    return resolved.is_file()
+
+
+def safe_photo_name(value: str) -> str | None:
+    name = Path(str(value).replace("\u3000", " ")).name.strip()
+    if not _PHOTO_NAME.fullmatch(name):
+        return None
+    return name
+
+
 def cell_text(value) -> str:
     if value is None:
         return ""
-    return str(value).strip()
+    text = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]", "", str(value))
+    return text.strip()[:4000]
 
 
 def parse_date(value) -> date | None:
@@ -97,7 +117,7 @@ def parse_photo_ref(value, fallback_date: date | None = None) -> str | None:
         return f"photo {text}.jpg"
     if not text.lower().endswith((".jpg", ".jpeg", ".png", ".webp")):
         text = f"{text}.jpg"
-    return text
+    return safe_photo_name(text)
 
 
 def photo_date_from_name(filename: str) -> date | None:
@@ -208,6 +228,20 @@ def read_reports_from_excel() -> dict[date, dict]:
     return reports
 
 
+def resolve_source_photo(photo_ref: str | None) -> Path | None:
+    name = safe_photo_name(photo_ref or "")
+    if name is None or not PHOTO_SRC.exists():
+        return None
+    direct = PHOTO_SRC / name
+    if is_file_inside(PHOTO_SRC, direct):
+        return direct
+    lowered = name.lower()
+    for path in PHOTO_SRC.iterdir():
+        if path.name.lower() == lowered and is_file_inside(PHOTO_SRC, path):
+            return path
+    return None
+
+
 def scan_source_photos() -> dict[date, Path]:
     photos: dict[date, Path] = {}
     if not PHOTO_SRC.exists():
@@ -215,6 +249,9 @@ def scan_source_photos() -> dict[date, Path]:
 
     for path in PHOTO_SRC.iterdir():
         if path.suffix.lower() not in {".jpg", ".jpeg", ".png", ".webp"}:
+            continue
+        if not is_file_inside(PHOTO_SRC, path):
+            print(f"警告: フォルダ外の写真をスキップしました: {path.name}")
             continue
         report_date = photo_date_from_name(path.name)
         if report_date is None:
@@ -283,14 +320,7 @@ def build_reports() -> list[dict]:
         photo_ref = excel_entry.get("photo_ref")
 
         if photo_path is None and photo_ref:
-            candidate = PHOTO_SRC / photo_ref
-            if candidate.exists():
-                photo_path = candidate
-            else:
-                for path in PHOTO_SRC.iterdir():
-                    if path.name.lower() == photo_ref.lower():
-                        photo_path = path
-                        break
+            photo_path = resolve_source_photo(photo_ref)
 
         if photo_path is None:
             continue

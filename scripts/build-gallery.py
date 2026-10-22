@@ -79,6 +79,13 @@ def copy_photos() -> int:
         if not src.exists():
             print(f"警告: 見つかりません: {src_name}")
             continue
+        try:
+            src.resolve().relative_to(PHOTO_SRC.resolve())
+        except (OSError, ValueError):
+            print(f"警告: フォルダ外を指しているためスキップしました: {src_name}")
+            continue
+        if not src.resolve().is_file():
+            continue
         shutil.copy2(src, GALLERY_DST / dst_name)
         copied += 1
     return copied

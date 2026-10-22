@@ -1,16 +1,15 @@
 {
   "source": "メンバー紹介.xlsx",
   "otherByGrade": {
-    "1": 1,
-    "2": 1
+    "1": 1
   },
-  "otherCount": 2,
+  "otherCount": 1,
   "counts": {
-    "grade3": 10,
-    "grade2": 7,
+    "grade3": 9,
+    "grade2": 6,
     "grade1": 15,
-    "listed": 32,
-    "total": 34
+    "listed": 30,
+    "total": 31
   },
   "members": [
     {
@@ -26,13 +25,6 @@
       "faculty": "工学部三類",
       "hobby": "まだ模索中！広く浅く",
       "photo": 2
-    },
-    {
-      "grade": 3,
-      "name": "Kosame",
-      "faculty": "文学部",
-      "hobby": "rock jazz makeup",
-      "photo": 3
     },
     {
       "grade": 3,
@@ -96,13 +88,6 @@
       "faculty": "工学部四類",
       "hobby": "野球観戦（中日ファン）・お菓子作り",
       "photo": 12
-    },
-    {
-      "grade": 2,
-      "name": "Haru",
-      "faculty": "工学部三類",
-      "hobby": "仮面ライダー鑑賞・音楽・ダンス",
-      "photo": 13
     },
     {
       "grade": 2,

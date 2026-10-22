@@ -23,9 +23,9 @@ JSON_OUT = WEBSITE / "data" / "members.json"
 
 OTHER_BY_GRADE = {
     1: 1,  # photo 31
-    2: 1,  # photo 16
 }
-EXCLUDED_PHOTOS = {16, 31}
+# 31 は「他」として人数に含める。3・13・16 は紹介からも人数からも外す。
+EXCLUDED_PHOTOS = {3, 13, 16, 31}
 
 SECTION_GRADES = {
     "三年生": 3,
@@ -50,7 +50,8 @@ def parse_photo(value) -> int | None:
 def cell_text(row: list, index: int) -> str:
     if index >= len(row) or row[index] is None:
         return ""
-    return str(row[index]).strip()
+    text = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]", "", str(row[index]))
+    return text.strip()[:500]
 
 
 def is_section_row(first_cell: str) -> int | None:
@@ -71,6 +72,13 @@ def copy_photos() -> None:
         return
     for path in PHOTO_SRC.iterdir():
         if path.suffix.lower() not in {".jpg", ".jpeg", ".png", ".webp"}:
+            continue
+        try:
+            path.resolve().relative_to(PHOTO_SRC.resolve())
+        except (OSError, ValueError):
+            print(f"警告: フォルダ外の写真をスキップしました: {path.name}")
+            continue
+        if not path.resolve().is_file():
             continue
         match = re.search(r"(\d+)", path.stem)
         if match:
