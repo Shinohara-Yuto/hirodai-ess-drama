@@ -1,3 +1,37 @@
+/* Kaisei Decol (SIL Open Font License), subset for the hero brand. */
+@font-face {
+  font-family: "Kaisei Decol";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/kaisei-decol-700-112.woff2") format("woff2");
+  unicode-range: U+5CF6;
+}
+@font-face {
+  font-family: "Kaisei Decol";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/kaisei-decol-700-115.woff2") format("woff2");
+  unicode-range: U+5B66, U+5E83;
+}
+@font-face {
+  font-family: "Kaisei Decol";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/kaisei-decol-700-117.woff2") format("woff2");
+  unicode-range: U+5927;
+}
+@font-face {
+  font-family: "Kaisei Decol";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/kaisei-decol-700-119.woff2") format("woff2");
+  unicode-range: U+30A1-30ED;
+}
+
 /* ===== Variables ===== */
 :root {
   --color-bg: #f3f0ea;
@@ -352,14 +386,38 @@ ul {
 }
 
 .hero-brand {
-  font-family: var(--font-serif);
-  font-size: clamp(0.78rem, 1.8vw, 0.95rem);
-  font-weight: 600;
-  line-height: 1.5;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  column-gap: 0.55em;
+  row-gap: 0.12em;
+  margin-bottom: 16px;
+  font-size: clamp(1.25rem, 3.4vw, 1.85rem);
+  line-height: 1.2;
+  color: #fff;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
+}
+
+.hero-brand-uni,
+.hero-brand-section {
+  font-family: "Kaisei Decol", "Shippori Mincho", serif;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.hero-brand-section {
+  flex-basis: 100%;
+}
+
+.hero-brand-mark {
+  font-family: "Cinzel", "Times New Roman", serif;
+  font-weight: 700;
+  font-size: 1.42em;
   letter-spacing: 0.18em;
+  line-height: 0.9;
   color: var(--color-accent-light);
-  margin-bottom: 14px;
-  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.45);
 }
 
 .hero-title {
