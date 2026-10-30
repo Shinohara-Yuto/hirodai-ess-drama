@@ -111,26 +111,25 @@ website/
 ├── scripts/build-reports.py
 └── assets/             画像・ポスター
 ```
-## 検索エンジン対策（SEO）
+## 公開方法（GitHub Pages）
 
-「広島大学 ESS」で検索されやすくするため、以下を設定済みです。
+検索には載せず、Instagram に貼ったリンクから見てもらう想定です（`noindex` 済み）。
 
-- 各ページの **title / description / keywords**
-- **Open Graph**（SNSシェア用）・**canonical URL**
-- **構造化データ**（Organization / WebSite / Event / FAQ）
-- `robots.txt` と `sitemap.xml`
+無料の GitHub では、Pages で一般公開するためにリポジトリを **Public** にする必要があります（ソースも公開されます）。
 
-### Google にサイトを登録する手順
+### 初回セットアップ
 
-1. [Google Search Console](https://search.google.com/search-console) にログイン
-2. プロパティに `https://shinohara-yuto.github.io/hirodai-ess-drama/` を追加
-3. サイトマップ URL を登録: `https://shinohara-yuto.github.io/hirodai-ess-drama/sitemap.xml`
-4. Instagram のプロフィールリンクに公式サイト URL を載せる（被リンクになり SEO に有効）
+1. リポジトリを Public にする（Settings → General → Danger Zone → Change visibility）
+2. Settings → Pages → Source を **Deploy from a branch**
+3. Branch を `main` / `/ (root)` にして Save
+4. 数分後に https://shinohara-yuto.github.io/hirodai-ess-drama/ が開く
+5. その URL を Instagram に載せる
 
-※ 検索結果への反映には数日〜数週間かかることがあります。
+以降は `main` に push するたびに更新されます。
 
-## 公開方法
+### 検索について
 
-- **GitHub Pages**: リポジトリにpushして Pages を有効化
-- **Netlify / Vercel**: `website` フォルダをドラッグ&ドロップでデプロイ
-- **大学サーバー**: FTPでアップロード
+- 各ページは `noindex, nofollow`
+- `robots.txt` は全体を `Disallow`
+- サイトマップは置かない
+- URL を知っていれば直接開ける点は変わりません（Instagram 経由の完全制限は不可）

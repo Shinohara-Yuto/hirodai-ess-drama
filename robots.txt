@@ -1,4 +1,2 @@
 User-agent: *
-Allow: /
-
-Sitemap: https://shinohara-yuto.github.io/hirodai-ess-drama/sitemap.xml
+Disallow: /
