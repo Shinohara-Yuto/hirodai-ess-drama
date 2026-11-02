@@ -1934,6 +1934,7 @@ ul {
 }
 
 .join-contact {
+  position: relative;
   background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(8px);
   border-radius: var(--radius);
@@ -1962,6 +1963,118 @@ ul {
   font-size: 0.875rem;
   color: var(--color-text-muted);
   margin-bottom: 24px;
+}
+
+.contact-section {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(243, 240, 234, 0.95)),
+    var(--color-bg);
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.contact-form--page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 28px;
+  background: #fff;
+  border: 1px solid rgba(28, 18, 16, 0.08);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 600px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-form--page {
+    padding: 20px;
+  }
+}
+
+.contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.contact-field label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.contact-field label span {
+  color: var(--color-circus-red);
+}
+
+.contact-field input,
+.contact-field select,
+.contact-field textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid rgba(28, 18, 16, 0.16);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.contact-field textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.contact-field input:focus,
+.contact-field select:focus,
+.contact-field textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.2);
+}
+
+.contact-honeypot {
+  display: none !important;
+}
+
+.contact-submit {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.contact-submit:disabled {
+  opacity: 0.7;
+  cursor: wait;
+  transform: none;
+}
+
+.contact-status {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.contact-status.is-success {
+  color: var(--color-lavender);
+}
+
+.contact-status.is-error {
+  color: var(--color-circus-red);
 }
 
 .join-links {

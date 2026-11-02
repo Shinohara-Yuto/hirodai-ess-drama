@@ -45,7 +45,7 @@ python website/scripts/build-members.py
 | 公演日程・会場・チケット情報 | `#current` セクションの `current-details` |
 | Instagram URL | `#contact-instagram` の `href`（設定済み: @hirodai_ess） |
 | メンバー情報 | `メンバー紹介.xlsx` → `python website/scripts/build-members.py` |
-| メールアドレス | `#contact-email` の `href` |
+| お問い合わせフォーム | Formspree `https://formspree.io/f/xoeepvwn`（`#contact`） |
 | 大学名・活動場所 | `#about` セクション |
 
 ## 活動報告の運用

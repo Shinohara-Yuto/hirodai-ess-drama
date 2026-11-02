@@ -403,9 +403,25 @@ async function initSponsors() {
   }
 }
 
-function finishPageIntro() {
-  const intro = document.getElementById("page-intro");
+function scrollToPageHash() {
   const hash = window.location.hash;
+  if (!hash) return;
+  const target = elementByPageHash(hash);
+  if (!target) return;
+
+  const run = () => target.scrollIntoView();
+  run();
+  window.requestAnimationFrame(run);
+  window.setTimeout(run, 120);
+  window.setTimeout(run, 400);
+  if (document.readyState !== "complete") {
+    window.addEventListener("load", run, { once: true });
+  }
+}
+
+function finishPageIntro(options = {}) {
+  const intro = document.getElementById("page-intro");
+  const immediate = Boolean(options.immediate);
   document.body.classList.remove("intro-pending");
   try {
     sessionStorage.setItem("ess-intro-seen", "1");
@@ -414,22 +430,24 @@ function finishPageIntro() {
   }
 
   if (!intro) {
-    if (hash) {
-      const target = elementByPageHash(hash);
-      if (target) target.scrollIntoView();
-    }
+    scrollToPageHash();
     return;
   }
 
   intro.classList.add("is-done");
   intro.setAttribute("aria-hidden", "true");
-  window.setTimeout(() => {
-    intro.remove();
-    if (hash) {
-      const target = elementByPageHash(hash);
-      if (target) target.scrollIntoView();
-    }
-  }, 800);
+
+  const cleanup = () => {
+    if (intro.isConnected) intro.remove();
+    scrollToPageHash();
+  };
+
+  if (immediate) {
+    cleanup();
+    return;
+  }
+
+  window.setTimeout(cleanup, 800);
 }
 
 function initPageIntro() {
@@ -453,9 +471,11 @@ function initPageIntro() {
     seen;
 
   if (shouldSkip) {
-    finishPageIntro();
+    finishPageIntro({ immediate: true });
     return;
   }
+
+  document.body.classList.add("intro-pending");
 
   const photos = [
     "assets/gallery/honkouen-1.jpg",
@@ -480,12 +500,129 @@ function initPageIntro() {
   window.setTimeout(finishPageIntro, 2600);
 }
 
+function setContactStatus(el, message, type) {
+  if (!el) return;
+  el.hidden = !message;
+  el.textContent = message || "";
+  el.classList.remove("is-success", "is-error");
+  if (type) el.classList.add(type);
+}
+
+function contactReturnUrl() {
+  try {
+    const url = new URL(window.location.href);
+    url.searchParams.set("contact", "sent");
+    url.hash = "contact";
+    return url.toString();
+  } catch (_) {
+    return "index.html?contact=sent#contact";
+  }
+}
+
+function initContactForm() {
+  const form = document.getElementById("contact-form");
+  if (!form) return;
+
+  const submitBtn = document.getElementById("contact-submit");
+  const statusEl = document.getElementById("contact-status");
+  const nextInput = document.getElementById("contact-next");
+  const endpoint = form.getAttribute("action");
+
+  if (nextInput) nextInput.value = contactReturnUrl();
+
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("contact") === "sent") {
+      setContactStatus(
+        statusEl,
+        "送信が完了しました。内容を確認のうえ、返信いたします。",
+        "is-success"
+      );
+      params.delete("contact");
+      const clean = `${window.location.pathname}${params.toString() ? `?${params}` : ""}#contact`;
+      window.history.replaceState({}, "", clean);
+    }
+  } catch (_) {
+    /* ignore */
+  }
+
+  form.addEventListener("submit", async (event) => {
+    if (!endpoint) return;
+
+    const honeypot = form.querySelector('[name="_gotcha"]');
+    if (honeypot && String(honeypot.value || "").trim()) {
+      event.preventDefault();
+      setContactStatus(statusEl, "送信が完了しました。ありがとうございます。", "is-success");
+      form.reset();
+      return;
+    }
+
+    // http(s) ではページ遷移なしで送信。file:// などでは通常のフォーム送信にフォールバック。
+    if (window.location.protocol !== "http:" && window.location.protocol !== "https:") {
+      return;
+    }
+
+    event.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    const originalLabel = submitBtn ? submitBtn.textContent : "";
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "送信中…";
+    }
+    setContactStatus(statusEl, "", "");
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" },
+      });
+
+      if (response.ok) {
+        form.reset();
+        if (nextInput) nextInput.value = contactReturnUrl();
+        setContactStatus(
+          statusEl,
+          "送信が完了しました。内容を確認のうえ、返信いたします。",
+          "is-success"
+        );
+      } else {
+        let detail = "";
+        try {
+          const data = await response.json();
+          detail = asPlainText(data && data.error, 160);
+        } catch (_) {
+          detail = "";
+        }
+        setContactStatus(
+          statusEl,
+          detail || "送信に失敗しました。時間をおいて再度お試しください。",
+          "is-error"
+        );
+      }
+    } catch (_) {
+      // fetch 失敗時は通常送信へフォールバック
+      form.submit();
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalLabel || "送信する";
+      }
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   syncAnnounceHeight();
   initPageIntro();
   initCountdown();
   initGallery();
   initSponsors();
+  initContactForm();
   initNav();
   initReveal();
   window.addEventListener("resize", syncAnnounceHeight);
